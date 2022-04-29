@@ -1,0 +1,50 @@
+service: fauna-serverless-v2
+
+frameworkVersion: '3'
+
+useDotenv: true
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-fauna
+
+fauna:
+  client:
+    secret: ${env:FAUNA_ROOT_KEY}
+    domain: db.us.fauna.com
+  collections:
+    Books: 
+      name: Books
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  httpApi:
+    cors: true
+
+functions:
+  book:
+    handler: handler.book
+    events:
+      - httpApi:
+          path: /books/{id}
+          method: get
+  createBook:
+    handler: handler.createBook
+    events:
+      - httpApi:
+          path: /books
+          method: post
+  deleteBook:
+    handler: handler.deleteBook
+    events:
+      - httpApi:
+          path: /books/{id}
+          method: delete
+  updateBook:
+    handler: handler.updateBook
+    events:
+      - httpApi:
+          path: /books/{id}
+          method: put
+  
