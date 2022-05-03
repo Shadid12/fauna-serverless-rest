@@ -2,8 +2,10 @@ service: fauna-serverless-v2
 
 frameworkVersion: '3'
 
+# Specify donenv
 useDotenv: true
 
+# Add Fauna Plugin
 plugins:
   - serverless-dotenv-plugin
   - serverless-fauna
@@ -22,9 +24,10 @@ provider:
   httpApi:
     cors: true
 
+# Define lambdas
 functions:
   book:
-    handler: handler.book
+    handler: handler.book 
     events:
       - httpApi:
           path: /books/{id}

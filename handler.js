@@ -2,11 +2,11 @@ const faunadb = require('faunadb')
 const q = faunadb.query;
 
 const serverClient = new faunadb.Client({ 
-  secret: process.env.FAUNA_SERVER_KEY,
-  domain: 'db.us.fauna.com'
+  secret: process.env.FAUNA_ROOT_KEY,
+  domain: process.env.FAUNA_DOMAIN,
 });
 
-// Create Book
+// Create Book Route
 module.exports.createBook = async (event, context, callback) => {
   const data = JSON.parse(event.body);
   try {
@@ -29,7 +29,11 @@ module.exports.createBook = async (event, context, callback) => {
 module.exports.book = async (event, context, callback) => {
   try {
     const book = await serverClient.query(
-      q.Get(q.Ref(q.Collection('Books'), event.pathParameters.id))
+      q.Get(
+        q.Ref(q.Collection('Books'), 
+        event.pathParameters.id
+        )
+      )
     )
     callback(null, {
       statusCode: 200,
@@ -44,7 +48,11 @@ module.exports.book = async (event, context, callback) => {
 module.exports.deleteBook = async (event, context, callback) => {
   try {
     const book = await serverClient.query(
-      q.Delete(q.Ref(q.Collection('Posts'), '1'))
+      q.Delete(
+        q.Ref(q.Collection('Posts'), 
+        event.pathParameters.id
+        )
+      )
     )
     callback(null, {
       statusCode: 204,
